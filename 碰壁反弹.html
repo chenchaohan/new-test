@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+    *{
+    	margin:0;padding:0;
+    }
+    #wrap {
+        width: 800px;
+        height: 400px;
+        border: 5px solid black;
+        position: relative;
+    }
+    
+    #inner {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        /*border:1px solid black;*/
+        background-color: red;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    
+    #obstacle {
+        width: 300px;
+        height: 200px;
+        background-color: blue;
+        position: absolute;
+        left: 90px;
+        top: 90px;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <p id="obstacle"></p>
+        <div id="inner"></div>
+    </div>
+</body>
+<script type="text/javascript">
+var wrap = document.getElementById("wrap");
+var inner = document.getElementById("inner");
+var obstacle = document.getElementById("obstacle");
+var vX = 2;var innerL = 0;
+var vY = 2;var innerT = 0;
+setInterval(function(){
+    var innerLeft = innerL;
+    var innerTop = innerT;
+    var innerRight = innerL + inner.offsetWidth;
+    var innerBottom = innerT + inner.offsetHeight;
+    var obstacleLeft = obstacle.offsetLeft;
+    var obstacleRight = obstacleLeft + obstacle.offsetWidth;
+    var obstacleTop = obstacle.offsetTop;
+    var obstacleBottom = obstacleTop + obstacle.offsetHeight;
+    // 判断是否碰到障碍物
+    if (innerRight >= obstacleLeft && innerBottom >= obstacleTop && innerLeft <= obstacleRight && innerTop <= obstacleBottom) {
+        if (vX > 0 && Math.abs(innerRight - obstacleLeft) <= Math.abs(vX)) { //左边         
+            vX = -vX;
+        } else if (vY > 0 && Math.abs(innerBottom - obstacleTop) <= Math.abs(vY)) { // 上边
+            vY = -vY;
+        } else if (vX < 0 && Math.abs(innerLeft - obstacleRight) <= Math.abs(vX)) {
+            vX = -vX;
+        } else if (vY < 0 && Math.abs(innerTop - obstacleBottom) <= Math.abs(vY)) {
+            vY = -vY;
+        }
+    }
+    // 判断是否碰壁
+    if (innerLeft < 0 || innerRight > wrap.clientWidth) {
+        vX = -vX;
+    }
+    if (innerTop < 0 || innerBottom > wrap.clientHeight) {
+        vY = -vY;
+    }
+    // 改变方向
+    innerL += vX;
+    inner.style.left = innerL + "px";
+    innerT += vY;
+    inner.style.top = innerT + "px";
+}, 10);
+</script>
+
+</html>
